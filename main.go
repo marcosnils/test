@@ -1,12 +1,5 @@
-package main
+package tools
 
 import (
-	"fmt"
-
-	"github.com/estesp/manifest-tool/v2/pkg/types"
+	_ "github.com/estesp/manifest-tool/v2/cmd/manifest-tool"
 )
-
-func main() {
-	t := types.Image{}
-	fmt.Println(t)
-}

@@ -1,0 +1,20 @@
+image: docker:20.10-git
+on: [push]
+services:
+  - docker:20.10-dind
+
+stages:          
+  - build
+
+build:
+  stage: build
+  before_script:
+    - |
+      cd /tmp
+      git clone --depth=1 https://$GITHUB_USER:$GITHUB_TOKEN@github.com/dagger/cloak.git
+      cd /tmp/cloak
+      go build -v ./cmd/cloak
+      mv cloak /usr/local/bin/
+      cloak dev
+  script:
+    - echo foo

@@ -8,7 +8,7 @@ on:
       - opened
       - synchronize
       - reopened
-      - review_requested
+      - ready_for_review
 
 jobs:
   createPullRequest:

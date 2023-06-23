@@ -65,7 +65,8 @@ func main() {
 }
 
 func (R *runtime) baseContainer() (*dagger.Container, error) {
-	c := R.client.Container().From(dockerVer + "-cli")
+	c := R.client.Container().From(dockerVer + "-cli").
+		WithExec([]string{"apk", "add", "curl"})
 	c = c.Pipeline("base/image")
 
 	return c, nil
@@ -77,6 +78,7 @@ func (R *runtime) daemonContainer() (*dagger.Container, error) {
 
 	c = c.WithMountedCache("/tmp", R.client.CacheVolume("shared-tmp"))
 	c = c.WithExposedPort(2375)
+	c = c.WithMountedCache("/var/lib/docker", R.client.CacheVolume("shared-docker"))
 
 	c = c.WithExec(
 		[]string{
@@ -119,6 +121,7 @@ func (R *runtime) dockerTest(c *dagger.Container) error {
 	t = t.WithExec([]string{"docker", "pull", "nginxdemos/hello"})
 	t = t.WithExec([]string{"docker", "images"})
 	// t = t.WithExec([]string{"ls", "-l", "/sys/fs/cgroup"})
+	t = t.WithEnvVariable("CACHE", time.Now().String())
 	t = t.WithExec([]string{"docker", "run", "-p", "4000:80", "-d", "nginxdemos/hello"})
 	t = t.WithExec([]string{"curl", "global-dockerd:4000"})
 
@@ -141,3 +144,4 @@ func (R *runtime) daemonTest(c *dagger.Container) error {
 
 	return err
 }
+

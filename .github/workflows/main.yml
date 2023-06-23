@@ -1,33 +1,22 @@
-name: Redis container example
-on: push
+name: 'ci'
+
+on:
+  push:
+    branches:
+    - master
 
 jobs:
-  # Label of the container job
-  container-job:
-    # Containers must run in Linux based operating systems
+  dagger:
     runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
-    container: redis
-
-    # Service containers to run with `container-job`
-    services:
-      # Label used to access the service container
-      redis:
-        # Docker Hub image
-        image: redis
-        # Set health checks to wait until redis has started
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
-      # Downloads a copy of the code in your repository before running CI tests
-      - name: Check out repository code
+      -
+        name: Checkout
         uses: actions/checkout@v3
-
-      - name: Connect to Redis
-        # Runs a script that creates a Redis client, populates
-        # the client with data, and retrieves data
-        run: redis-cli -h redis toto
+      -
+        name: Setup node
+        uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.20'
+      -
+        name: Run CI
+        run: go run main.go

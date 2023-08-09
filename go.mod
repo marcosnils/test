@@ -2,8 +2,9 @@ module test
 
 go 1.20
 
+require dagger.io/dagger v0.7.4
+
 require (
-	dagger.io/dagger v0.8.1 // indirect
 	github.com/99designs/gqlgen v0.17.36 // indirect
 	github.com/Khan/genqlient v0.6.0 // indirect
 	github.com/adrg/xdg v0.4.0 // indirect

@@ -9,9 +9,37 @@ import (
 )
 
 func main() {
-	if err := build(context.Background()); err != nil {
-		fmt.Println(err)
+	action := os.Args[1]
+
+	switch action {
+	case "build":
+		if err := build(context.Background()); err != nil {
+			fmt.Println(err)
+		}
+	case "test":
+		if err := test(context.Background()); err != nil {
+			fmt.Println(err)
+		}
+	default:
+		panic("unknown action")
 	}
+}
+
+func test(ctx context.Context) error {
+	client, err := dagger.Connect(ctx, dagger.WithLogOutput(os.Stderr))
+	if err != nil {
+		return err
+	}
+	defer client.Close()
+
+	_, err = client.Container().From("alpine").
+		Pipeline("Test").
+		WithExec([]string{"echo", "Running a test"}).
+		ExitCode(ctx)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func build(ctx context.Context) error {

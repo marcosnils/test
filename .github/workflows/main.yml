@@ -20,6 +20,25 @@ jobs:
           go-version: '>=1.20'
       -
         name: Run CI
-        run: go run main.go
+        run: go run main.go build
         env: # Or as an environment variable
           _EXPERIMENTAL_DAGGER_CLOUD_TOKEN: ${{ secrets.DAGGER_CLOUD_TOKEN }}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Setup go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '>=1.20'
+      -
+        name: Run CI
+        run: go run main.go test
+        env: # Or as an environment variable
+          _EXPERIMENTAL_DAGGER_CLOUD_TOKEN: ${{ secrets.DAGGER_CLOUD_TOKEN }}
+
+

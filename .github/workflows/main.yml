@@ -20,3 +20,5 @@ jobs:
       -
         name: Run CI
         run: go run main.go
+        env: # Or as an environment variable
+          _EXPERIMENTAL_DAGGER_CLOUD_TOKEN: ${{ secrets.DAGGER_CLOUD_TOKEN }}

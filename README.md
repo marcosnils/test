@@ -4,3 +4,5 @@
 
 
 ## Add uninstall instructions
+
+## Add Juli instructions
